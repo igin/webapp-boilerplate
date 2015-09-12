@@ -10,7 +10,8 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync').create(),
     gulpSass = require('gulp-sass'),
     gulpSourceMaps = require('gulp-sourcemaps'),
-    gulpConcat = require('gulp-concat');
+    gulpConcat = require('gulp-concat'),
+    gulpInstall = require('gulp-install');
 
 var copyFiles = [
     app_dir + '/**/*.html',
@@ -22,8 +23,15 @@ var sassFiles = [
 ];
 
 //////////////////////////////////////////////////////////
+// install bower dependencies
+gulp.task('install-dependencies', function(){
+    gulp.src([app_dir + "bower.json"])
+        .pipe(gulpInstall());
+});
+
+//////////////////////////////////////////////////////////
 // copy static files from app dir to build dir
-gulp.task('copy-files', function(){
+gulp.task('copy-files', ['install-dependencies'], function(){
     gulp.src(copyFiles).pipe(gulp.dest(build_dir));
     gutil.log("Done copying.");
 });
